@@ -1,0 +1,43 @@
+import numpy as np
+import scipy.stats as stats
+
+# Verileri tanımlayalım
+fifo = np.array([612, 678, 592, 580, 656, 568, 594])
+lifo = np.array([604, 674, 590, 590, 652, 562, 590])
+k_means = np.array([594, 682, 590, 568, 628, 586, 572])
+agglomerative = np.array([616, 704, 660, 646, 678, 626, 620])
+
+# T-test fonksiyonu
+def t_test(x, y):
+    d = x - y
+    mean_diff = np.mean(d)
+    std_diff = np.std(d, ddof=1)
+    t_stat = mean_diff / (std_diff / np.sqrt(len(d)))
+    p_value = stats.t.sf(np.abs(t_stat), df=len(d)-1) * 2
+    return t_stat, p_value
+
+# FIFO vs LIFO
+t_stat_fifo_lifo, p_value_fifo_lifo = t_test(fifo, lifo)
+
+# FIFO vs K-means
+t_stat_fifo_kmeans, p_value_fifo_kmeans = t_test(fifo, k_means)
+
+# FIFO vs Agglomerative
+t_stat_fifo_agglomerative, p_value_fifo_agglomerative = t_test(fifo, agglomerative)
+
+# LIFO vs K-means
+t_stat_lifo_kmeans, p_value_lifo_kmeans = t_test(lifo, k_means)
+
+# LIFO vs Agglomerative
+t_stat_lifo_agglomerative, p_value_lifo_agglomerative = t_test(lifo, agglomerative)
+
+# K-means vs Agglomerative
+t_stat_kmeans_agglomerative, p_value_kmeans_agglomerative = t_test(k_means, agglomerative)
+
+# Sonuçları yazdırma
+print(f"FIFO vs LIFO: t = {t_stat_fifo_lifo:.3f}, p = {p_value_fifo_lifo:.3f}")
+print(f"FIFO vs K-means: t = {t_stat_fifo_kmeans:.3f}, p = {p_value_fifo_kmeans:.3f}")
+print(f"FIFO vs Agglomerative: t = {t_stat_fifo_agglomerative:.3f}, p = {p_value_fifo_agglomerative:.3f}")
+print(f"LIFO vs K-means: t = {t_stat_lifo_kmeans:.3f}, p = {p_value_lifo_kmeans:.3f}")
+print(f"LIFO vs Agglomerative: t = {t_stat_lifo_agglomerative:.3f}, p = {p_value_lifo_agglomerative:.3f}")
+print(f"K-means vs Agglomerative: t = {t_stat_kmeans_agglomerative:.3f}, p = {p_value_kmeans_agglomerative:.3f}")
